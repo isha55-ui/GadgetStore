@@ -1,36 +1,33 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "ecommerce-app"
-        CONTAINER_NAME = "ecommerce-container"
-    }
-
     stages {
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'docker build -t $IMAGE_NAME .'
-                }
+                sh 'docker build -t gadgetstore-app .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                script {
-                    sh 'docker stop $CONTAINER_NAME || true'
-                    sh 'docker rm $CONTAINER_NAME || true'
-                }
+                sh 'docker stop gadgetstore-container || true'
+                sh 'docker rm gadgetstore-container || true'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                script {
-                    sh 'docker run -d -p 8080:80 --name $CONTAINER_NAME $IMAGE_NAME'
-                }
+                sh 'docker run -d -p 8090:80 --name gadgetstore-container gadgetstore-app'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful'
+        }
+        failure {
+            echo 'Deployment Failed'
         }
     }
 }
