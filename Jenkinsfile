@@ -10,24 +10,15 @@ pipeline {
 
         stage('Stop Old Container') {
             steps {
-                sh 'docker stop gadgetstore-container || true'
-                sh 'docker rm gadgetstore-container || true'
+                sh 'docker stop gadget-container || true'
+                sh 'docker rm gadget-container || true'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 8090:80 --name gadgetstore-container gadgetstore-app'
+                sh 'docker run -d -p 8088:80 --name gadget-container gadgetstore-app'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment Successful'
-        }
-        failure {
-            echo 'Deployment Failed'
         }
     }
 }
